@@ -1,5 +1,16 @@
-<h1>Welcome to My Awesome App</h1>
+<h1>Rails ❤️ Firebase Auth</h1>
 
+<h2>What this is</h2>
+<p>This app demonstrates the use of Firebase Auth and Rails to manage user accounts and authentication across browser and API.</p>
+<ol>
+  <li>Click the "Sign in with Google" button to authenticate with Google</li>
+  <li>View the user response that comes back from Firebase auth</li>
+  <li>Click the "Test Auth'd API Call" button to send an authenticated request to the API</li>
+  <li>Reload the page and confirm that auth state is persisted across page reloads</li>
+  <li>Click the "Sign Out" button to log out of Firebase auth</li>
+</ol>
+
+<h2>Actions</h2>
 <div id="loading">Loading...</div>
 
 <div id="anonymous" style="display: none">
@@ -8,6 +19,7 @@
 
 <div id="authenticated" style="display: none">
   <div id="userInfo"></div>
+  <button id="testAPICall">Test Auth'd API Call</button>
   <button id="logoutButton">Sign Out</button>
 </div>
 
@@ -33,6 +45,8 @@
   const authenticated = document.getElementById("authenticated");
   const userInfo = document.getElementById("userInfo");
 
+  let currentUser;
+
   loginButton.addEventListener("click", async function signInWithGoogle() {
     const provider = new firebase.auth.GoogleAuthProvider();
     try {
@@ -50,6 +64,21 @@
     console.log("Signed out!");
   });
 
+  testAPICall.addEventListener("click", async function() {
+    const idToken = await currentUser.getIdToken();
+    try {
+      const resp = await fetch('/api/me', {
+        headers: {
+          'Authorization': `Bearer ${idToken}`,
+        }
+      });
+      const body = await resp.json();
+      alert(JSON.stringify(body, null, 2));
+    } catch (err) {
+      alert(`Could not request user data from API: ${err}`);
+    }
+  });
+
   firebase.auth().onAuthStateChanged((user) => {
     console.log("Auth state changed!", user);
     if (user) {
@@ -57,7 +86,11 @@
       // https://firebase.google.com/docs/reference/js/firebase.User
       userInfo.innerHTML = `<p>Hello, ${
         user.displayName
-      }!</p><code><pre>${JSON.stringify(user, null, 2)}</pre></code>`;
+      }!</p>
+      <h3>Response from Firebase Auth</h3>
+      <code><pre>${JSON.stringify(user, null, 2)}</pre></code>`;
+
+      currentUser = user;
 
       loading.style.display = "none";
       anonymous.style.display = "none";
@@ -65,6 +98,8 @@
     } else {
       // User is signed out
       userInfo.innerHTML = "";
+
+      currentUser = null;
   
       loading.style.display = "none";
       anonymous.style.display = "block";

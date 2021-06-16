@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  firebase_uid: MyString
+  email: MyString
+  display_name: MyString
+  photo_url: MyString
+
+two:
+  firebase_uid: MyString
+  email: MyString
+  display_name: MyString
+  photo_url: MyString

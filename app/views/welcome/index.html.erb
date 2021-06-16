@@ -1,0 +1,74 @@
+<h1>Welcome to My Awesome App</h1>
+
+<div id="loading">Loading...</div>
+
+<div id="anonymous" style="display: none">
+  <button id="loginButton">Sign in with Google</button>
+</div>
+
+<div id="authenticated" style="display: none">
+  <div id="userInfo"></div>
+  <button id="logoutButton">Sign Out</button>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-auth.js"></script>
+<script>
+  var firebaseConfig = {
+    apiKey: "<%= ENV['FIREBASE_WEB_API_KEY'] %>",
+    authDomain: "<%= ENV['FIREBASE_AUTH_DOMAIN'] %>",
+    projectId: "<%= ENV['FIREBASE_PROJECT_ID'] %>",
+    storageBucket: "<%= ENV['FIREBASE_STORAGE_BUCKET'] %>",
+    messagingSenderId: "<%= ENV['FIREBASE_MESSAGING_SENDER_ID'] %>",
+    appId: "<%= ENV['FIREBASE_APP_ID'] %>",
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+  const loginButton = document.getElementById("loginButton");
+  const logoutButton = document.getElementById("logoutButton");
+  const loading = document.getElementById("loading");
+  const anonymous = document.getElementById("anonymous");
+  const authenticated = document.getElementById("authenticated");
+  const userInfo = document.getElementById("userInfo");
+
+  loginButton.addEventListener("click", async function signInWithGoogle() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    try {
+      console.log("Signing in...");
+      const result = await firebase.auth().signInWithPopup(provider);
+      console.log("Signed in!");
+    } catch (err) {
+      console.error(err);
+    }
+  });
+
+  logoutButton.addEventListener("click", async function signout() {
+    console.log("Signing out...");
+    await firebase.auth().signOut();
+    console.log("Signed out!");
+  });
+
+  firebase.auth().onAuthStateChanged((user) => {
+    console.log("Auth state changed!", user);
+    if (user) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/firebase.User
+      userInfo.innerHTML = `<p>Hello, ${
+        user.displayName
+      }!</p><code><pre>${JSON.stringify(user, null, 2)}</pre></code>`;
+
+      loading.style.display = "none";
+      anonymous.style.display = "none";
+      authenticated.style.display = "block";
+    } else {
+      // User is signed out
+      userInfo.innerHTML = "";
+  
+      loading.style.display = "none";
+      anonymous.style.display = "block";
+      authenticated.style.display = "none";
+    }
+  });
+</script>

@@ -1,0 +1,2 @@
+# Rails Firebase Auth Demo
+

@@ -16,4 +16,3 @@ test:
 
 production:
   <<: *default
-  database: ruby_firebase_auth_demo_prod

@@ -65,6 +65,7 @@
   });
 
   testAPICall.addEventListener("click", async function() {
+    // https://firebase.google.com/docs/reference/js/firebase.User#getidtoken
     const idToken = await currentUser.getIdToken();
     try {
       const resp = await fetch('/api/me', {

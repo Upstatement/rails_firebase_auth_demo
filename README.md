@@ -4,12 +4,9 @@ A reference implementation using client-side Firebase Authentication with server
 
 Technologies used:
 - Ruby on Rails
-- SQLite
+- Postgres
 - Firebase Authentication JS SDK
 - Firebase Admin REST API
-
-## How it works
-
 ## Set Up
 
 1. Install RoR dependencies with Bundler
@@ -18,9 +15,23 @@ Technologies used:
     bundle install
     ```
 
-2. Configure environment secrets
-3. Run migrations
-4. Serve the app
+2. Install Postgres
 
-## Deployment
-TK
+    ```
+    brew install postgresql
+    ```
+
+3. Create a Firebase project (if you haven't already) and populate a `.env` file with app credentials, using `.env.example` as a template
+4. Set up the development database
+
+    ```
+    bin/rails db:setup
+    ```
+
+5. Serve the app
+
+    ```
+    bin/rails serve
+    ```
+
+You should now be able to visit the site at http://localhost:3000.

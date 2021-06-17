@@ -20,7 +20,20 @@ module Api
     private
 
     # Authenticate request with Firebase auth token
+    #
+    # Note: As written, there is a round-trip to Firebase for every
+    # authenticated API request. You could avoid the need for this by:
+    #
+    # 1. Using Rails sessions to cache the authenticated local user ID
+    # 2. Using a stateless, token-based solution (ex: JSON Web Tokens)
+    #
+    # See also:
+    # - https://guides.rubyonrails.org/security.html#sessions
+    # - https://www.pluralsight.com/guides/token-based-authentication-with-ruby-on-rails-5-api
+    # - https://jwt.io/
+    # - https://security.stackexchange.com/a/92123
     def authenticate
+      # Check for a bearer token in the `Authorization` HTTP header
       authenticate_with_http_token do |token|
         # Retrieve user details by token from Firebase
         firebase_user = fetch_firebase_user_with_token(token)

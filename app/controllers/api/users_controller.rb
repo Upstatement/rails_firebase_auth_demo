@@ -12,7 +12,7 @@ module Api
       if @current_user
         render json: @current_user
       else
-        render json: { error: 404, message: 'You are not logged in' }, status: 404
+        render json: { error: 401, message: 'Missing authorization token' }, status: 401
       end
     end
 

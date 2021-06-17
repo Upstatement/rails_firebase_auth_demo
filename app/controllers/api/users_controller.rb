@@ -8,6 +8,7 @@ module Api
   class UsersController < ApplicationController
     before_action :authenticate
 
+    # Retrieve user info for the currently authenticated user
     def me
       if @current_user
         render json: @current_user
@@ -21,7 +22,10 @@ module Api
     # Authenticate request with Firebase auth token
     def authenticate
       authenticate_with_http_token do |token|
+        # Retrieve user details by token from Firebase
         firebase_user = fetch_firebase_user_with_token(token)
+
+        # Find or create an associated local user by Firebase ID
         @current_user = User.find_or_create_by(firebase_uid: firebase_user['localId']) do |user|
           user.email = firebase_user['email']
           user.display_name = firebase_user['displayName']

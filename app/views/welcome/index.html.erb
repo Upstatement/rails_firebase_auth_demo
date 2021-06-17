@@ -47,9 +47,16 @@
   const authenticated = document.getElementById("authenticated");
   const userInfo = document.getElementById("userInfo");
 
+  /** @type {firebase.User} */
   let currentUser;
 
-  loginButton.addEventListener("click", async function signInWithGoogle() {
+  /**
+   * Sign in with Google
+   * 
+   * https://firebase.google.com/docs/reference/js/firebase.auth.Auth#signinwithpopup
+   * https://firebase.google.com/docs/reference/js/firebase.auth.GoogleAuthProvider
+   */
+  loginButton.addEventListener("click", async function() {
     const provider = new firebase.auth.GoogleAuthProvider();
     try {
       console.log("Signing in...");
@@ -60,15 +67,26 @@
     }
   });
 
-  logoutButton.addEventListener("click", async function signout() {
+  /**
+   * Sign out the current user
+   * 
+   * https://firebase.google.com/docs/reference/js/firebase.auth.Auth#signout
+   */
+  logoutButton.addEventListener("click", async function() {
     console.log("Signing out...");
     await firebase.auth().signOut();
     console.log("Signed out!");
   });
 
+  /**
+   * Trigger an authenticated API call to the Rails backend
+   * 
+   * https://firebase.google.com/docs/reference/js/firebase.User#getidtoken
+   */
   testAPICall.addEventListener("click", async function() {
-    // https://firebase.google.com/docs/reference/js/firebase.User#getidtoken
+    // Get the Firebase ID token required to authenticate the API request
     const idToken = await currentUser.getIdToken();
+
     try {
       const resp = await fetch('/api/me', {
         headers: {
@@ -82,8 +100,14 @@
     }
   });
 
+  /**
+   * Monitor and response to auth state changes.
+   * 
+   * https://firebase.google.com/docs/reference/js/firebase.auth.Auth#onauthstatechanged
+   */
   firebase.auth().onAuthStateChanged((user) => {
     console.log("Auth state changed!", user);
+
     if (user) {
       // User is signed in, see docs for a list of available properties
       // https://firebase.google.com/docs/reference/js/firebase.User

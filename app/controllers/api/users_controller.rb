@@ -2,6 +2,8 @@
 
 # Users controller
 
+require 'net/http'
+require 'json'
 # API Module
 module Api
   # Users controller

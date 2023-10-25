@@ -16,7 +16,7 @@ While you don't _need_ any server code for authentication, odds are if you need 
 
 This repo demonstrates the use of Firebase Auth for user storage, authentication, and session management in tandem with a Ruby on Rails-powered API.
 
-- Client-side authentication logic is [inlined in the wecome view](https://github.com/Upstatement/rails_firebase_auth_demo/blob/main/app/views/welcome/index.html.erb#L30-L112), with Firebase Auth [loaded via CDN](https://github.com/Upstatement/rails_firebase_auth_demo/blob/main/app/views/welcome/index.html.erb#L28-L29). This logic includes:
+- Client-side authentication logic is [inlined in the welcome view](https://github.com/Upstatement/rails_firebase_auth_demo/blob/main/app/views/welcome/index.html.erb#L30-L112), with Firebase Auth [loaded via CDN](https://github.com/Upstatement/rails_firebase_auth_demo/blob/main/app/views/welcome/index.html.erb#L28-L29). This logic includes:
   - Sign in button that redirects to Google for authentication
   - Rendering of JSON response from Firebase Auth after successful sign in
   - Test button to demonstrate an authenticated API call to the Rails backend
